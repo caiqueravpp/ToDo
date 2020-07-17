@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/toDo")
+@RequestMapping("/app")
 public class ToDoController {
     @Autowired
     private ToDoRepository toDoRepository;
