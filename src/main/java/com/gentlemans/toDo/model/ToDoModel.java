@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 @Entity
-@Table
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -19,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ToDoModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(name = "title", nullable = false)
