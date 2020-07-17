@@ -64,7 +64,7 @@ public class ToDoController {
                 .orElseThrow(() -> new ResourceNotFoundException("Nota não encontrada no ::" + noteId));
 
         toDoRepository.delete(toDoModel);
-        Map<String, Boolean> response = HashMap<>();
+        Map<String, Boolean> response = new HashMap<>();
         response.put("excluido", Boolean.TRUE);
         return response;
     }
