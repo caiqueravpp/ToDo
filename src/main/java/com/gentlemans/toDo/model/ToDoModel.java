@@ -19,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ToDoModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "title", nullable = false)
