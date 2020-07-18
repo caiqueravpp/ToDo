@@ -16,6 +16,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import sun.management.AgentConfigurationError;
+
 @Getter
 @Setter
 @RunWith(SpringRunner.class)
@@ -50,6 +52,30 @@ class ToDoApplicationTests {
 		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes/1", ToDoModel.class);
 		System.out.println(toDoModel.getTitle());
 		Assert.assertNotNull(toDoModel);
+	}
+
+	@Test
+	public void testCreateNote{
+		ToDoModel toDoModel = new ToDoModel();
+		toDoModel.setTitle("Teste");
+		toDoModel.setDescription("Testando com JUnit a API de notas");
+
+		ResponseEntity<ToDoModel> postResponse	= restTemplate.postForEntity(getRootUrl() + "/notes", toDoModel, ToDoModel.class);
+		Assert.assertNotNull(postResponse);
+		Assert.assertNotNull(postResponse.getBody());
+	}
+
+	@Test
+	public void testUpdatePost(){
+		int id = 1;
+		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes" + id, ToDoModel.class);
+		toDoModel.setTitle("Alteração");
+		toDoModel.setDescription("Testando Update");
+
+		restTemplate.put(getRootUrl() + "/notes" + id, toDoModel);
+
+		ToDoModel updatedNote = restTemplate.getForObject(getRootUrl() + "/notes" + id, ToDoModel.class);
+		Assert.assertNotNull(updatedNote);
 	}
 
 }
