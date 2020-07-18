@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 import sun.management.AgentConfigurationError;
 
 @Getter
@@ -49,13 +47,13 @@ class ToDoApplicationTests {
 
 	@Test
 	public void testGetNotesById(){
-		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes/1", ToDoModel.class);
+		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes/2", ToDoModel.class);
 		System.out.println(toDoModel.getTitle());
 		Assert.assertNotNull(toDoModel);
 	}
 
 	@Test
-	public void testCreateNote{
+	public void testCreateNote(){
 		ToDoModel toDoModel = new ToDoModel();
 		toDoModel.setTitle("Teste");
 		toDoModel.setDescription("Testando com JUnit a API de notas");
@@ -67,7 +65,7 @@ class ToDoApplicationTests {
 
 	@Test
 	public void testUpdatePost(){
-		int id = 1;
+		int id = 2;
 		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes" + id, ToDoModel.class);
 		toDoModel.setTitle("Alteração");
 		toDoModel.setDescription("Testando Update");
@@ -78,4 +76,18 @@ class ToDoApplicationTests {
 		Assert.assertNotNull(updatedNote);
 	}
 
+	@Test
+	public void testDeletePost(){
+		int id = 3;
+		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes" + id, ToDoModel.class);
+		Assert.assertNotNull(toDoModel);
+
+		restTemplate.delete(getRootUrl() + "/notes" + id);
+
+		try{
+			toDoModel = restTemplate.getForObject(getRootUrl() + "/notes" + id, ToDoModel.class);
+		} catch (final HttpClientErrorException e) {
+			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
+		}
+	}
 }
