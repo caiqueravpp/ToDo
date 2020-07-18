@@ -1,6 +1,9 @@
 package com.gentlemans.toDo;
 
+import com.gentlemans.toDo.model.ToDoModel;
 import javafx.application.Application;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +16,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-
+@Getter
+@Setter
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ToDoApplicationTests {
@@ -33,12 +37,19 @@ class ToDoApplicationTests {
 	}
 
 	@Test
-	public void testGetAllUsers(){
+	public void testGetAllNotes(){
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
 		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/notes", HttpMethod.GET, entity, String.class);
 		Assert.assertNotNull(response.getBody());
+	}
+
+	@Test
+	public void testGetNotesById(){
+		ToDoModel toDoModel = restTemplate.getForObject(getRootUrl() + "/notes/1", ToDoModel.class);
+		System.out.println(toDoModel.getTitle());
+		Assert.assertNotNull(toDoModel);
 	}
 
 }
